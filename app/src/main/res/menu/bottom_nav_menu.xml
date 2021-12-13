@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home_option"
-        android:title="Home"
-        android:icon="@drawable/nav_home_foreground"
-        android:onClick="handleSelectNavigation"/>
-    <item
         android:id="@+id/map_option"
         android:title="Map"
         android:icon="@drawable/nav_map_foreground"
+        android:onClick="handleSelectNavigation"/>
+    <item
+        android:id="@+id/home_option"
+        android:title="Home"
+        android:icon="@drawable/nav_home_foreground"
         android:onClick="handleSelectNavigation"/>
     <item
         android:id="@+id/account_option"

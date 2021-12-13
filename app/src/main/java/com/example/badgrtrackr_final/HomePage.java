@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,15 +45,23 @@ public class HomePage extends Fragment {
                         currLocation = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
                     });
         }
+        distances = new HashMap<>();
         return inflater.inflate(R.layout.home_page, container, false);
     }
 
     private void loadDistances(List<LocationData> locations){
         for (LocationData loc : locations){
             float[] res = new float[3];
-            double distance = res[0];
-            Location.distanceBetween(currLocation.latitude, currLocation.longitude,
-                    loc.getCoordinates().get("longitude"), loc.getCoordinates().get("latitude"), res);
+            double distance;
+            if (currLocation != null) {
+                Location.distanceBetween(currLocation.latitude, currLocation.longitude,
+                        loc.getCoordinates().get("longitude"), loc.getCoordinates().get("latitude"), res);
+                distance = res[0];
+            } else {
+                distance = 0;
+            }
+            //Log.e("Distance Data", loc.getName() + ", " + distance * 0.000621371);
+
             distances.put(loc.getName(), distance * 0.000621371);
         }
     }
