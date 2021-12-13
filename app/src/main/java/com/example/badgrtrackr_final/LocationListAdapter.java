@@ -2,6 +2,7 @@ package com.example.badgrtrackr_final;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.badgrtrackr_final.api.LocationListAPI;
 import com.example.badgrtrackr_final.data_types.LocationData;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +109,17 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
                 break;
         }
 
+        //Calculating and adding the distance data
+        double distance;
+        float[] res = new float[10];
+        if (locAPI.getCurrLoc() != null){
+            Location.distanceBetween(locAPI.getCurrLoc().latitude, locAPI.getCurrLoc().longitude, group.getCoordinates().get("longitude"), group.getCoordinates().get("latitude"), res);
+            distance = res[0] * 0.000621371;
+        } else {
+            distance = -1;
+        }
+        TextView distanceView = view.findViewById(R.id.locDistance);
+        distanceView.setText(String.valueOf(Math.round(100*distance)/100.0));
         return view;
     }
 

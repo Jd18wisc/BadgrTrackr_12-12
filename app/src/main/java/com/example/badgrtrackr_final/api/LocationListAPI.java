@@ -1,6 +1,7 @@
 package com.example.badgrtrackr_final.api;
 
 import com.example.badgrtrackr_final.data_types.LocationData;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.Map;
 public class LocationListAPI {
     private List<LocationData> locationList; // list of locations, each list item is a Location object
     private Map<String, Map<String, String>> allLocHistory; // list of the location history for all locations Map<LocationName, Map<"mon", "1&2&3&4">>
+    private LatLng currLoc;
     // the LocationListAPI constructor passes the allLocHistory.get(row[0]) to the Location object where row[0] is the name
 
     // constructor
@@ -88,4 +90,9 @@ public class LocationListAPI {
         }
         return null;
     }
+
+    public void setCurrLoc(LatLng currLoc) {
+        this.currLoc = currLoc;
+    }
+    public LatLng getCurrLoc(){return currLoc;}
 }

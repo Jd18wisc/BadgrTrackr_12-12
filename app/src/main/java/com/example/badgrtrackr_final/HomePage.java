@@ -49,22 +49,6 @@ public class HomePage extends Fragment {
         return inflater.inflate(R.layout.home_page, container, false);
     }
 
-    private void loadDistances(List<LocationData> locations){
-        for (LocationData loc : locations){
-            float[] res = new float[3];
-            double distance;
-            if (currLocation != null) {
-                Location.distanceBetween(currLocation.latitude, currLocation.longitude,
-                        loc.getCoordinates().get("longitude"), loc.getCoordinates().get("latitude"), res);
-                distance = res[0];
-            } else {
-                distance = 0;
-            }
-            //Log.e("Distance Data", loc.getName() + ", " + distance * 0.000621371);
-
-            distances.put(loc.getName(), distance * 0.000621371);
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -74,13 +58,11 @@ public class HomePage extends Fragment {
         InputStream allLocHisIs = getResources().openRawResource(R.raw.location_history); // create a new input stream for the location_history csv
 
         locAPI = new LocationListAPI(is, allLocHisIs); // create a new location API with the required data
+        locAPI.setCurrLoc(currLocation);
 
         expListView = view.findViewById(R.id.expandable_list); // access the expandable view xml object
         expListAdapter = new LocationListAdapter(view.getContext(), locAPI, locAPI.getLocationList()); // set the adapter to a new instance of the location adapter
         expListView.setAdapter(expListAdapter); // set the expandable list with the adapter
-
-        loadDistances(locAPI.getLocationList());
-
         expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int lastExpandedPosition = -1;
             @Override
