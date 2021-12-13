@@ -24,6 +24,7 @@ public class LocationData {
     private int trafficIndicator; // 0 = low, 1 = med, 2 = high
     private int trafficCount; // the total number of visits this week (will potentially be used for calculating traffic for features to be added)
     private Map<String, Map<String, Integer>> locHistoryWeek; // history divided by day and week
+    private Double dist;
     // Ex: Map<mon, Map<8am, 12>>
 
     // Constructor
@@ -34,6 +35,7 @@ public class LocationData {
         this.coordinates.put("longitude", Double.valueOf(csvRow[5]));
         this.coordinates.put("latitude", Double.valueOf(csvRow[6]));
         this.trafficIndicator = Integer.valueOf(csvRow[7]);
+        this.dist = -1.0;
         formatLocationData(weekData); // takes the weekData Map and formats it into a Map<String, Map<String, Integer>>
         // weekData = <"mon", "1&2&3&4&5&6&7&8"> where & acts a divider between values for each hour of the day
     }
@@ -54,6 +56,14 @@ public class LocationData {
             locHistoryWeek.put(loc.getKey(), values);
         }
         trafficCount = total;
+    }
+
+    public void setDistance(Double dist) {
+        this.dist = dist;
+    }
+
+    public Double getDistance() {
+        return dist;
     }
 
     // get name
@@ -109,44 +119,4 @@ public class LocationData {
         }
         return "" + hour + ampm;
     }
-
-    // function originally used to create and load mock data
-    /*
-    public void createLocationHistory() {
-        Random rand = new Random();
-        int min = 0;
-        int max = 0;
-        int indicator = rand.nextInt(3);
-        switch(indicator) {
-            case 0:
-                min = 0;
-                max = 20;
-                break;
-            case 1:
-                min = 21;
-                max = 40;
-                break;
-            case 2:
-                min = 41;
-                max = 60;
-                break;
-        }
-
-        trafficIndicator = indicator;
-
-        trafficCount = 0;
-        locHistoryWeek = new HashMap<>();
-        Log.d("DDD", getName());
-        for (String day : days) {
-            Map<String, Integer> hourValues = new HashMap<>();
-            for (String hour : hours) {
-                int value = rand.nextInt((max - min+1))+ min;
-                trafficCount += value;
-                hourValues.put(hour, value);
-            }
-            Log.d("DDD" + day, hourValues.toString());
-            locHistoryWeek.put(day, hourValues);
-        }
-    }
-    */
 }

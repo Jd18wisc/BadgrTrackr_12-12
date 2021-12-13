@@ -3,6 +3,7 @@ package com.example.badgrtrackr_final;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,18 @@ import com.example.badgrtrackr_final.data_types.LocationData;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class LocationListAdapter extends BaseExpandableListAdapter {
     private Context context; // context passed from fragment
     private List<LocationData> locations; // list of locations to be displayed, changed by the filter/searches
     private List<LocationData> locationsOriginal; // original list to reset search
     private LocationListAPI locAPI; // instance of the current location API if needed
+    private Map<String, Double> distSorter;
 
     public LocationListAdapter(Context context, LocationListAPI locAPI, List<LocationData> locations) {
         this.context = context;
@@ -42,7 +48,7 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 2; // 4 groups: address, number of people visiting, 2 charts
+        return 1; // 4 groups: address, number of people visiting, 2 charts
     }
 
     @Override
@@ -119,7 +125,8 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
             distance = -1;
         }
         TextView distanceView = view.findViewById(R.id.locDistance);
-        distanceView.setText(String.valueOf(Math.round(100*distance)/100.0));
+        locations.get(groupPosition).setDistance(Math.round(100*distance)/100.0);
+        distanceView.setText(String.valueOf(Math.round(100*distance)/100.0) + " mi.");
         return view;
     }
 
@@ -127,12 +134,14 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
     // for now this is just a placeholder "Data", we will use this to create dropdown data, ignore for now
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
+        LocationData group = (LocationData) getGroup(groupPosition);
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.exp_child, null);
         }
         TextView item = view.findViewById(R.id.childTextView);
-        item.setText("Data");
+        String[] addy = group.getAddress().split(",");
+        item.setText(addy[0] + "\n" + addy[1] + "\n" + addy[2]);
         return view;
     }
 
@@ -160,5 +169,96 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
             }
             return newList;
         }
+    }
+
+    // something wrong
+    public List<LocationData> distanceAsc() {
+        List<LocationData> temp = distanceDesc();
+
+        Collections.sort(temp, compareById);
+        return temp;
+    }
+
+    Comparator<LocationData> compareById = new Comparator<LocationData>() {
+        @Override
+        public int compare(LocationData o1, LocationData o2) {
+            return o1.getDistance().compareTo(o2.getDistance());
+        }
+    };
+
+    public List<LocationData> distanceDesc() {
+        List<LocationData> temp = new ArrayList<>();
+        String[][] vals = new String[locations.size()][];
+
+        for (int i = 0; i < locations.size(); i++) {
+            String[] t = {locations.get(i).getName(), locations.get(i).getDistance().toString()};
+            vals[i] = t;
+        }
+
+        Arrays.sort(vals, new Comparator<String[]>() {
+            @Override
+            public int compare(String[] o1, String[] o2) {
+                return Double.valueOf(o2[1]).compareTo(Double.valueOf(o1[1]));
+            }
+        });
+
+        for (int i = 0; i < vals.length; i++) {
+            for (LocationData loc : locations) {
+                if (locAPI.getLocation(loc.getName()).getName().equals(vals[i][0])) {
+                    temp.add(loc);
+                }
+            }
+        }
+        return temp;
+    }
+
+    public List<LocationData> trafficDesc() {
+        List<LocationData> newList = new ArrayList<>();
+
+        for (LocationData loc : locations) {
+            if (loc.getTrafficIndicator() == 2) {
+                newList.add(loc);
+            }
+        }
+
+        for (LocationData loc : locations) {
+            if (loc.getTrafficIndicator() == 1) {
+                newList.add(loc);
+            }
+        }
+
+        for (LocationData loc : locations) {
+            if (loc.getTrafficIndicator() == 0) {
+                newList.add(loc);
+            }
+        }
+
+        locations = locationsOriginal;
+        return newList;
+    }
+
+    public List<LocationData> trafficAsc() {
+        List<LocationData> newList = new ArrayList<>();
+
+        for (LocationData loc : locations) {
+            if (loc.getTrafficIndicator() == 0) {
+                newList.add(loc);
+            }
+        }
+
+        for (LocationData loc : locations) {
+            if (loc.getTrafficIndicator() == 1) {
+                newList.add(loc);
+            }
+        }
+
+        for (LocationData loc : locations) {
+            if (loc.getTrafficIndicator() == 2) {
+                newList.add(loc);
+            }
+        }
+
+        locations = locationsOriginal;
+        return newList;
     }
 }

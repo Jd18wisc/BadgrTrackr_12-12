@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -22,6 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,22 +37,13 @@ public class HomePage extends Fragment {
     LocationListAPI locAPI; // location list API to access location data
     FusedLocationProviderClient client;
     LatLng currLocation;
-    Map<String, Double> distances;
+    Spinner dropdown;
+    ArrayAdapter<String> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int permission = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            client = LocationServices.getFusedLocationProviderClient(getContext());
-            client.getLastLocation()
-                    .addOnCompleteListener(task -> {
-                        currLocation = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
-                    });
-        }
-        distances = new HashMap<>();
         return inflater.inflate(R.layout.home_page, container, false);
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -58,11 +53,25 @@ public class HomePage extends Fragment {
         InputStream allLocHisIs = getResources().openRawResource(R.raw.location_history); // create a new input stream for the location_history csv
 
         locAPI = new LocationListAPI(is, allLocHisIs); // create a new location API with the required data
-        locAPI.setCurrLoc(currLocation);
 
         expListView = view.findViewById(R.id.expandable_list); // access the expandable view xml object
         expListAdapter = new LocationListAdapter(view.getContext(), locAPI, locAPI.getLocationList()); // set the adapter to a new instance of the location adapter
         expListView.setAdapter(expListAdapter); // set the expandable list with the adapter
+
+        int permission = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            client = LocationServices.getFusedLocationProviderClient(getContext());
+            client.getLastLocation()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            currLocation = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
+                            locAPI.setCurrLoc(currLocation);
+                            expListAdapter = new LocationListAdapter(view.getContext(), locAPI, locAPI.getLocationList());
+                            expListView.setAdapter(expListAdapter);
+                        }
+                    });
+        }
+
         expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int lastExpandedPosition = -1;
             @Override
@@ -73,14 +82,6 @@ public class HomePage extends Fragment {
                 lastExpandedPosition = i;
             }
         });
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                String selected = expListAdapter.getChild(i, i1).toString();
-                return true;
-            }
-        });
-
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -108,6 +109,40 @@ public class HomePage extends Fragment {
                 expListAdapter = new LocationListAdapter(view.getContext(), locAPI, temp); // new adapter instance with only locations found by search
                 expListView.setAdapter(expListAdapter); // set the view to the new adapter
                 return false;
+            }
+        });
+
+        String[] items = new String[]{
+                "None", "Dist-asc", "Dist-desc", "Traffic-asc", "Traffic-desc"
+        };
+
+        dropdown = view.findViewById(R.id.home_dropdown);
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, items);
+        dropdown.setAdapter(adapter);
+
+        dropdown.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String comp = parent.getItemAtPosition(position).toString();
+                List<LocationData> temp = new ArrayList<>();
+                if (comp.equals("None")) {
+                    temp = expListAdapter.filterData(""); // search locations for submitted string
+                } else if (comp.equals("Traffic-asc")) {
+                    temp = expListAdapter.trafficAsc(); // search locations for submitted string
+                } else if (comp.equals("Traffic-desc")) {
+                    temp = expListAdapter.trafficDesc(); // search locations for submitted string
+                } else if (comp.equals("Dist-desc")) {
+                    temp = expListAdapter.distanceDesc(); // search locations for submitted string
+                } else if (comp.equals("Dist-asc")) {
+                    temp = expListAdapter.distanceAsc(); // search locations for submitted string
+                }
+                expListAdapter = new LocationListAdapter(view.getContext(), locAPI, temp); // new adapter instance with only locations found by search
+                expListView.setAdapter(expListAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
             }
         });
     }

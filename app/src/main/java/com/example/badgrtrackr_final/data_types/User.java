@@ -1,9 +1,13 @@
 package com.example.badgrtrackr_final.data_types;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -51,6 +55,32 @@ public class User {
             }
         }
         return key;
+    }
+
+    public List<String[]> getCommonLocations() {
+        List<String[]> commonLocations = new ArrayList<>();
+        String[] tempArr = {"favorite", getFavoriteLocation(), locationHistory.get(getFavoriteLocation()).toString()};
+        commonLocations.add(tempArr);
+
+        String locName = "Shell Recreational Center";
+        Map<String, Integer> temp = locationHistory;
+        for (int i = 0; i < 2; i++) {
+            for (Map.Entry<String, Integer> loc : temp.entrySet()) {
+                if (loc.getValue() > temp.get(loc.getKey())) {
+                    locName = loc.getKey();
+                }
+            }
+            if (i == 0) {
+                String[] common1 = {"common1", locName, locationHistory.get(locName).toString()};
+                commonLocations.add(common1);
+            } else {
+                String[] common2 = {"common2", locName, locationHistory.get(locName).toString()};
+                commonLocations.add(common2);
+            }
+            temp.remove(locName);
+            Log.d("uuu", commonLocations.toString());
+        }
+        return commonLocations;
     }
 
     // returns the number of visits for a specified location

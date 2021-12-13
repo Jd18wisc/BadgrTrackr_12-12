@@ -34,6 +34,5 @@
         android:id="@+id/locDistance"
         android:layout_width="60dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/gray" />
+        android:layout_weight="1" />
 </LinearLayout>
