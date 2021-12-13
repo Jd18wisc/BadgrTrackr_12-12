@@ -2,8 +2,6 @@ package com.example.badgrtrackr_final;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,27 +11,25 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.example.badgrtrackr_final.api.LocationListAPI;
-import com.example.badgrtrackr_final.data_types.Location;
+import com.example.badgrtrackr_final.data_types.LocationData;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class LocationListAdapter extends BaseExpandableListAdapter {
     private Context context; // context passed from fragment
-    private List<Location> locations; // list of locations to be displayed, changed by the filter/searches
-    private List<Location> locationsOriginal; // original list to reset search
+    private List<LocationData> locations; // list of locations to be displayed, changed by the filter/searches
+    private List<LocationData> locationsOriginal; // original list to reset search
     private LocationListAPI locAPI; // instance of the current location API if needed
 
-    public LocationListAdapter(Context context, LocationListAPI locAPI, List<Location> locations) {
+    public LocationListAdapter(Context context, LocationListAPI locAPI, List<LocationData> locations) {
         this.context = context;
         this.locAPI = locAPI;
         this.locations = locations;
         this.locationsOriginal =  locAPI.getLocationList();
     }
 
-    public List<Location> getLocations() {
+    public List<LocationData> getLocations() {
         return locations;
     }
 
@@ -84,7 +80,7 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
     // sets the groups in the expandable list
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View view, ViewGroup parent) {
-        Location group = (Location) getGroup(groupPosition); // get the Location object being created
+        LocationData group = (LocationData) getGroup(groupPosition); // get the Location object being created
 
         // if the view is empty, inflate the view into the screen
         if (view == null) {
@@ -136,15 +132,15 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
     // * need to update this function to only search the names for the length of query
     // * if query == s, we would only want to return Shell Recreational Center
     // * would return of the location names containing an "s" right now
-    public List<Location> filterData(String query) {
+    public List<LocationData> filterData(String query) {
         query = query.toLowerCase(); // converts query to lowercase
 
         if (query.isEmpty() || query.equals("")) { // if the query has nothing in it or is empty
             locations = locationsOriginal; // reset the locations list
              return locations; // return all locations
         } else { // if the search text is not empty
-            List<Location> newList = new ArrayList<>(); // temporary list
-            for (Location location : locationsOriginal) { // iterate through all names in the location list
+            List<LocationData> newList = new ArrayList<>(); // temporary list
+            for (LocationData location : locationsOriginal) { // iterate through all names in the location list
                 if (location.getName().toLowerCase().contains(query)) { // add items containing the query
                     newList.add(location); // return the list
                 }

@@ -14,7 +14,7 @@ import java.util.Map;
     Get random priority 1-3, then do a random range in that frame
 
  */
-public class Location {
+public class LocationData {
     // hours of the day for setting the locHistoryWeek map
     private String[] hours = {"8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm", "10pm", "11pm", "12am"};
 
@@ -27,7 +27,7 @@ public class Location {
     // Ex: Map<mon, Map<8am, 12>>
 
     // Constructor
-    public Location(String[] csvRow, Map<String, String> weekData) {
+    public LocationData(String[] csvRow, Map<String, String> weekData) {
         this.name = csvRow[0];
         this.address = csvRow[1] + ", " + csvRow[2] + ", " + csvRow[3] + " " + csvRow[4];
         this.coordinates = new HashMap<String, Double>();

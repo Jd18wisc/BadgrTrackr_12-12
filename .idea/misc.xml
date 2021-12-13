@@ -31,11 +31,21 @@
         <entry key="..\:/Users/jddon/Documents/College/Senior Year/407/BadgrTrackr_Final/app/src/main/res/layout/home_page.xml" value="0.1" />
         <entry key="..\:/Users/jddon/Documents/College/Senior Year/407/BadgrTrackr_Final/app/src/main/res/layout/map_page.xml" value="0.1" />
         <entry key="..\:/Users/jddon/Documents/College/Senior Year/407/BadgrTrackr_Final/app/src/main/res/menu/bottom_nav_menu.xml" value="0.19537037037037036" />
+        <entry key="app/src/main/res/drawable/nav_home_foreground.xml" value="0.225" />
+        <entry key="app/src/main/res/drawable/nav_map_foreground.xml" value="0.225" />
+        <entry key="app/src/main/res/drawable/selector.xml" value="0.225" />
         <entry key="app/src/main/res/drawable/traffic_indicator_high.xml" value="0.225" />
         <entry key="app/src/main/res/drawable/traffic_indicator_low.xml" value="0.225" />
         <entry key="app/src/main/res/drawable/traffic_indicator_medium.xml" value="0.225" />
         <entry key="app/src/main/res/layout/account_page.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/action_bar.xml" value="0.20885416666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.20885416666666667" />
+        <entry key="app/src/main/res/layout/adapter_layout.xml" value="0.20885416666666667" />
+        <entry key="app/src/main/res/layout/exp_child.xml" value="0.1766304347826087" />
+        <entry key="app/src/main/res/layout/exp_group.xml" value="0.1766304347826087" />
+        <entry key="app/src/main/res/layout/home_page.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/layout/map_page.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.20885416666666667" />
       </map>
     </option>
   </component>

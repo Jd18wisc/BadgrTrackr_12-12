@@ -7,15 +7,9 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.badgrtrackr_final.api.LocationListAPI;
-import com.example.badgrtrackr_final.api.UserAPI;
-import com.example.badgrtrackr_final.data_types.Location;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNav; // create bottom nav
