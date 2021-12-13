@@ -42,7 +42,7 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 2; // 4 groups: address, number of people visiting, 2 charts
+        return 1; // 4 groups: address, number of people visiting, 2 charts
     }
 
     @Override
@@ -119,7 +119,7 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
             distance = -1;
         }
         TextView distanceView = view.findViewById(R.id.locDistance);
-        distanceView.setText(String.valueOf(Math.round(100*distance)/100.0));
+        distanceView.setText(String.valueOf(Math.round(100*distance)/100.0) + " mi.");
         return view;
     }
 
@@ -127,12 +127,14 @@ public class LocationListAdapter extends BaseExpandableListAdapter {
     // for now this is just a placeholder "Data", we will use this to create dropdown data, ignore for now
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
+        LocationData group = (LocationData) getGroup(groupPosition);
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.exp_child, null);
         }
         TextView item = view.findViewById(R.id.childTextView);
-        item.setText("Data");
+        String[] addy = group.getAddress().split(",");
+        item.setText(addy[0] + "\n" + addy[1] + "\n" + addy[2]);
         return view;
     }
 

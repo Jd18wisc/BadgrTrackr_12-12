@@ -42,13 +42,14 @@ public class HomePage extends Fragment {
             client = LocationServices.getFusedLocationProviderClient(getContext());
             client.getLastLocation()
                     .addOnCompleteListener(task -> {
-                        currLocation = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
+                        if (task.isSuccessful()) {
+                            currLocation = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
+                        }
                     });
         }
         distances = new HashMap<>();
         return inflater.inflate(R.layout.home_page, container, false);
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
