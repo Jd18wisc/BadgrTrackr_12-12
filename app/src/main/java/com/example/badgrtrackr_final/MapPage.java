@@ -95,8 +95,23 @@ public class MapPage extends Fragment implements OnMapReadyCallback {
         for (Location location : locList){
             Log.e("Loc", location.getName() + ": "  + location.getCoordinates().get("longitude") + ", " +  location.getCoordinates().get("latitude"));
             LatLng latlng = new LatLng(location.getCoordinates().get("longitude"),location.getCoordinates().get("latitude"));
-
-            locations.add(new MarkerOptions().position(latlng));
+            BitmapDescriptor des;
+            switch (location.getTrafficIndicator()){
+                case 0:
+                    des = BitmapDescriptorFactory.defaultMarker(120);
+                    break;
+                case 1:
+                    des = BitmapDescriptorFactory.defaultMarker(60);
+                    break;
+                case 2:
+                    des = BitmapDescriptorFactory.defaultMarker(0);
+                    break;
+                default:
+                    des = BitmapDescriptorFactory.defaultMarker(180);
+                    break;
+            }
+            MarkerOptions marker = new MarkerOptions().position(latlng).icon(des).title(location.getName());
+            locations.add(marker);
         }
         for (int i=0;i<locations.size();i++){
             mGoogleMap.addMarker(locations.get(i));
