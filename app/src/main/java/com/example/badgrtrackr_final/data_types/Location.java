@@ -3,14 +3,11 @@ package com.example.badgrtrackr_final.data_types;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 /*
     How to generate day data
@@ -23,7 +20,7 @@ public class Location {
 
     private String name; // name of the location
     private String address; // location address
-    private Map<String, Float> coordinates; // contains: latitude=x, longitude=y, keys are latitude, longitude
+    private Map<String, Double> coordinates; // contains: latitude=x, longitude=y, keys are latitude, longitude
     private int trafficIndicator; // 0 = low, 1 = med, 2 = high
     private int trafficCount; // the total number of visits this week (will potentially be used for calculating traffic for features to be added)
     private Map<String, Map<String, Integer>> locHistoryWeek; // history divided by day and week
@@ -33,9 +30,9 @@ public class Location {
     public Location(String[] csvRow, Map<String, String> weekData) {
         this.name = csvRow[0];
         this.address = csvRow[1] + ", " + csvRow[2] + ", " + csvRow[3] + " " + csvRow[4];
-        this.coordinates = new HashMap<>();
-        this.coordinates.put("longitude", Float.valueOf(csvRow[5]));
-        this.coordinates.put("latitude", Float.valueOf(csvRow[6]));
+        this.coordinates = new HashMap<String, Double>();
+        this.coordinates.put("longitude", Double.valueOf(csvRow[5]));
+        this.coordinates.put("latitude", Double.valueOf(csvRow[6]));
         this.trafficIndicator = Integer.valueOf(csvRow[7]);
         formatLocationData(weekData); // takes the weekData Map and formats it into a Map<String, Map<String, Integer>>
         // weekData = <"mon", "1&2&3&4&5&6&7&8"> where & acts a divider between values for each hour of the day
@@ -80,7 +77,7 @@ public class Location {
     }
 
     // returns the lat/long coordinate map
-    public Map<String, Float> getCoordinates() {
+    public Map<String, Double> getCoordinates() {
         return coordinates;
     }
 

@@ -3,7 +3,9 @@ package com.example.badgrtrackr_final;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     HomePage home = new HomePage(); // create new home page fragment
     MapPage map = new MapPage(); // create new map fragment
     AccountPage account = new AccountPage(); // create new account fragment
+    int PERMISSIONS_REQUEST_ACCESS_ACCESS_FINE_LOCATION = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); // sets the header to custom instead of default
         getSupportActionBar().setCustomView(R.layout.action_bar); // pass in the custom app header
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_ACCESS_FINE_LOCATION);
     }
 
     // handles the nav page change selection
