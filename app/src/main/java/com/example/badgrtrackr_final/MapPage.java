@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.badgrtrackr_final.api.LocationListAPI;
+import com.example.badgrtrackr_final.data_types.LocationData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,16 +30,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import com.example.badgrtrackr_final.data_types.Location;
 
 public class MapPage extends Fragment implements OnMapReadyCallback {
     GoogleMap mGoogleMap;
     MapView mMapView;
     View mView;
     LocationListAPI locAPI; // location list API to access location data
-    List<Location> locList;
+    List<LocationData> locList;
     FusedLocationProviderClient client;
 
     public MapPage() {
@@ -92,11 +90,26 @@ public class MapPage extends Fragment implements OnMapReadyCallback {
                     });
         }
         ArrayList<MarkerOptions> locations = new ArrayList<MarkerOptions>();
-        for (Location location : locList){
+        for (LocationData location : locList){
             Log.e("Loc", location.getName() + ": "  + location.getCoordinates().get("longitude") + ", " +  location.getCoordinates().get("latitude"));
             LatLng latlng = new LatLng(location.getCoordinates().get("longitude"),location.getCoordinates().get("latitude"));
-
-            locations.add(new MarkerOptions().position(latlng));
+            BitmapDescriptor des;
+            switch (location.getTrafficIndicator()){
+                case 0:
+                    des = BitmapDescriptorFactory.defaultMarker(120);
+                    break;
+                case 1:
+                    des = BitmapDescriptorFactory.defaultMarker(60);
+                    break;
+                case 2:
+                    des = BitmapDescriptorFactory.defaultMarker(0);
+                    break;
+                default:
+                    des = BitmapDescriptorFactory.defaultMarker(180);
+                    break;
+            }
+            MarkerOptions marker = new MarkerOptions().position(latlng).icon(des).title(location.getName());
+            locations.add(marker);
         }
         for (int i=0;i<locations.size();i++){
             mGoogleMap.addMarker(locations.get(i));

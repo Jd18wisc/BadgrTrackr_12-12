@@ -1,8 +1,6 @@
 package com.example.badgrtrackr_final.api;
 
-import android.util.Log;
-
-import com.example.badgrtrackr_final.data_types.Location;
+import com.example.badgrtrackr_final.data_types.LocationData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LocationListAPI {
-    private List<Location> locationList; // list of locations, each list item is a Location object
+    private List<LocationData> locationList; // list of locations, each list item is a Location object
     private Map<String, Map<String, String>> allLocHistory; // list of the location history for all locations Map<LocationName, Map<"mon", "1&2&3&4">>
     // the LocationListAPI constructor passes the allLocHistory.get(row[0]) to the Location object where row[0] is the name
 
@@ -31,7 +29,7 @@ public class LocationListAPI {
                     continue;
                 }
                 String[] row = csvLine.split(";");
-                locationList.add(new Location(row, allLocHistory.get(row[0]))); // pass the csv split csv row and location history to Location constructor
+                locationList.add(new LocationData(row, allLocHistory.get(row[0]))); // pass the csv split csv row and location history to Location constructor
             }
         } catch (IOException exception) {
             throw new RuntimeException("Error reading CSV file");
@@ -77,13 +75,13 @@ public class LocationListAPI {
     }
 
     // returns the list of all locations
-    public List<Location> getLocationList() {
+    public List<LocationData> getLocationList() {
         return locationList;
     }
 
     // returns a specified location
-    public Location getLocation(String locationName) {
-        for (Location location : locationList) {
+    public LocationData getLocation(String locationName) {
+        for (LocationData location : locationList) {
             if (location.getName().equals(locationName)) {
                 return location;
             }
