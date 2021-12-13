@@ -92,20 +92,21 @@
 
     <TextView
         android:id="@+id/FavoriteLocation"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginEnd="49dp"
+        android:layout_width="312dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         android:layout_marginBottom="6dp"
         android:background="#AEACAC"
-        android:text="Favorite Location:        Gordon's Dining Hall\n\n
-Number of Visits: 16\n\n
-Total Time Spent: 14h 25m\n\n
+        android:text="Favorite Location: Gordon's Dining Hall\n
+Number of Visits: 16\n
+Total Time Spent: 14h 25m\n
 Average Duration: 30m
                 "
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/CommonlyVisited"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LocationHistoryHeader" />
@@ -124,23 +125,24 @@ Average Duration: 30m
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginEnd="49dp"
+        android:layout_width="312dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         android:background="#AEACAC"
         android:text="Rheta's Market"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView10"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CommonlyVisited" />
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="312dp"
+        android:layout_height="52dp"
         android:layout_marginStart="48dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="17dp"
@@ -150,6 +152,7 @@ Average Duration: 30m
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
